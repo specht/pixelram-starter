@@ -3,7 +3,7 @@ EMCC := emcc
 PROGRAM := main
 ARGS :=
 
-PIXELRAM_VERSION := v0.1.21
+PIXELRAM_VERSION := v0.1.22
 PIXELRAM_BASE := https://raw.githubusercontent.com/specht/pixelram/$(PIXELRAM_VERSION)
 PIXELRAM_ROOT := .pixelram
 PIXELRAM_DIR := $(PIXELRAM_ROOT)/$(PIXELRAM_VERSION)
