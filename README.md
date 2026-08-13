@@ -4,7 +4,7 @@ A minimal starter project for [PixelRAM](https://github.com/specht/pixelram).
 
 The project begins with a single pixel in `main.c`. The Makefile downloads the
 pinned PixelRAM dependency into a versioned hidden directory such as
-`.pixelram/v0.1.19/` on the first build.
+`.pixelram/v0.1.21/` on the first build.
 
 ## Build
 
