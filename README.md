@@ -39,7 +39,8 @@ make crystal
 Clones the PixelRAM repository at the pinned version and builds its port of
 Crystal Caves (1991), whose shareware episode comes with the OpenCrystalCaves
 source. The result is `spiele/crystal.html`; arrow keys walk, Z jumps, X
-shoots. The PixelRAM repository describes the other ports in `PORTS.md`.
+shoots. The other ports have their own descriptions under `ports/` in the
+PixelRAM repository.
 
 ## Cleaning up
 
