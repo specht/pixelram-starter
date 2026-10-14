@@ -1,3 +1,4 @@
 .pixelram/
 .build/
-main.html
+*.html
+spiele/

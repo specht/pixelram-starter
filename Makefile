@@ -29,7 +29,7 @@ PIXELRAM_FILES := \
 	$(PIXELRAM_DIR)/shell.html \
 	$(PIXELRAM_DIR)/make_args.py
 
-.PHONY: all clean distclean FORCE
+.PHONY: all clean distclean crystal FORCE
 
 all: $(PROGRAM).html
 
@@ -76,8 +76,25 @@ $(PROGRAM).html: $(PROGRAM).c $(PIXELRAM_FILES) $(ARGS_JS)
 		-lraylib \
 		-o $@
 
+# Crystal Caves (1991, shareware episode) running on PixelRAM: the full
+# PixelRAM repository at the same version builds it, the result lands in
+# spiele/. Takes a minute or two the first time.
+PIXELRAM_REPO := $(PIXELRAM_ROOT)/$(PIXELRAM_VERSION)-repo
+GAMES_DIR := spiele
+
+crystal:
+	@if [ ! -d "$(PIXELRAM_REPO)/.git" ]; then \
+		echo "Downloading PixelRAM $(PIXELRAM_VERSION) with its game ports..."; \
+		git clone -q --depth 1 --branch $(PIXELRAM_VERSION) https://github.com/specht/pixelram.git "$(PIXELRAM_REPO)"; \
+	fi
+	$(MAKE) -C "$(PIXELRAM_REPO)" crystal
+	mkdir -p $(GAMES_DIR)
+	cp $(PIXELRAM_REPO)/build/crystal.* $(GAMES_DIR)/
+	@echo
+	@echo "Ready: $(GAMES_DIR)/crystal.html"
+
 clean:
 	rm -rf $(BUILD_DIR) $(PROGRAM).html
 
 distclean: clean
-	rm -rf $(PIXELRAM_ROOT)
+	rm -rf $(PIXELRAM_ROOT) $(GAMES_DIR)
