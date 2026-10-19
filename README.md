@@ -3,9 +3,10 @@
 A starter project for [PixelRAM](https://github.com/specht/pixelram), used by
 the Hackschule tutorial »Echtzeitgrafik mit C«.
 
-The project begins with a single pixel in `main.c`. The Makefile downloads the
-pinned PixelRAM dependency into a versioned hidden directory such as
-`.pixelram/v0.1.22/` on the first build.
+The project begins with a single pixel in `main.c`. The first build downloads
+the newest PixelRAM release into a hidden directory named after it, such as
+`.pixelram/v0.1.23/`. Later builds use that copy, so a project keeps building
+the same way, also offline.
 
 ## Build
 
@@ -36,7 +37,7 @@ make PROGRAM=beispiele/sterne   # 400 stars flying towards you in 3D
 make crystal
 ```
 
-Clones the PixelRAM repository at the pinned version and builds its port of
+Clones the PixelRAM repository at the downloaded version and builds its port of
 Crystal Caves (1991), whose shareware episode comes with the OpenCrystalCaves
 source. The result is `spiele/crystal.html`; arrow keys walk, Z jumps, X
 shoots. The other ports have their own descriptions under `ports/` in the
@@ -47,6 +48,5 @@ PixelRAM repository.
 `make clean` removes the build files and keeps the downloaded PixelRAM files.
 `make distclean` also removes the downloaded PixelRAM copy and `spiele/`.
 
-To update PixelRAM, change only `PIXELRAM_VERSION` in the Makefile. Because the
-version is part of the hidden cache path, the next `make` downloads that
-release.
+`make pixelram-update` removes the downloaded copy and builds with the newest
+PixelRAM release.

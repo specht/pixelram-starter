@@ -3,9 +3,17 @@ EMCC := emcc
 PROGRAM := main
 ARGS :=
 
-PIXELRAM_VERSION := v0.1.22
-PIXELRAM_BASE := https://raw.githubusercontent.com/specht/pixelram/$(PIXELRAM_VERSION)
+# PixelRAM: the first make takes the newest release and keeps it in
+# .pixelram/VERSION/. Every later make uses that copy, so a project keeps
+# building the same way, also offline. make pixelram-update takes the
+# newest release again.
+PIXELRAM_GIT := https://github.com/specht/pixelram.git
 PIXELRAM_ROOT := .pixelram
+PIXELRAM_VERSION := $(shell ls -d $(PIXELRAM_ROOT)/v* 2>/dev/null | grep -v -- '-repo$$' | sed 's|.*/||' | sort -V | tail -n 1)
+ifeq ($(PIXELRAM_VERSION),)
+PIXELRAM_VERSION := $(shell git ls-remote --tags --refs --sort=-v:refname $(PIXELRAM_GIT) 'v*' 2>/dev/null | head -n 1 | sed 's|.*refs/tags/||')
+endif
+PIXELRAM_BASE := https://raw.githubusercontent.com/specht/pixelram/$(PIXELRAM_VERSION)
 PIXELRAM_DIR := $(PIXELRAM_ROOT)/$(PIXELRAM_VERSION)
 
 CFLAGS := -O2 -std=c11 -Wall -Wextra -Wpedantic -I$(PIXELRAM_DIR)
@@ -29,11 +37,15 @@ PIXELRAM_FILES := \
 	$(PIXELRAM_DIR)/shell.html \
 	$(PIXELRAM_DIR)/make_args.py
 
-.PHONY: all clean distclean crystal FORCE
+.PHONY: all clean distclean crystal pixelram-update FORCE
 
 all: $(PROGRAM).html
 
 $(PIXELRAM_DIR):
+	@if [ -z "$(PIXELRAM_VERSION)" ]; then \
+		echo "Could not find a PixelRAM release: is GitHub reachable? (git ls-remote $(PIXELRAM_GIT))"; \
+		exit 1; \
+	fi
 	mkdir -p $@
 
 $(BUILD_DIR):
@@ -85,7 +97,7 @@ GAMES_DIR := spiele
 crystal:
 	@if [ ! -d "$(PIXELRAM_REPO)/.git" ]; then \
 		echo "Downloading PixelRAM $(PIXELRAM_VERSION) with its game ports..."; \
-		git clone -q --depth 1 --branch $(PIXELRAM_VERSION) https://github.com/specht/pixelram.git "$(PIXELRAM_REPO)"; \
+		git clone -q --depth 1 --branch $(PIXELRAM_VERSION) $(PIXELRAM_GIT) "$(PIXELRAM_REPO)"; \
 	fi
 	$(MAKE) -C "$(PIXELRAM_REPO)" crystal
 	mkdir -p $(GAMES_DIR)
@@ -98,3 +110,8 @@ clean:
 
 distclean: clean
 	rm -rf $(PIXELRAM_ROOT) $(GAMES_DIR)
+
+# Forget the downloaded PixelRAM and build with the newest release.
+pixelram-update:
+	rm -rf $(PIXELRAM_ROOT)
+	$(MAKE) PROGRAM=$(PROGRAM)
