@@ -25,7 +25,7 @@ This creates `main.html`. Any other program in the folder builds the same way,
 ```sh
 make PROGRAM=beispiele/feuer    # fire from the heat of the neighbouring pixels
 make PROGRAM=beispiele/tunnel   # flight through a tunnel from distance and angle
-make PROGRAM=beispiele/julia    # a slowly changing Julia set
+make PROGRAM=beispiele/julia    # a slowly changing Julia set, smooth edges
 make PROGRAM=beispiele/magie    # palette cycling: only the colours move
 make PROGRAM=beispiele/sterne   # 400 stars flying towards you in 3D
 ```
