@@ -82,7 +82,9 @@ $(ARGS_JS): FORCE $(PIXELRAM_DIR)/make_args.py | $(BUILD_DIR)
 		rm -f $@.tmp; \
 	fi
 
-$(PROGRAM).html: $(PROGRAM).c $(PIXELRAM_FILES) $(ARGS_JS)
+# the headers beside the program count too: a new palette.h (palette.rb in
+# »Raycasting in C«) builds the page again
+$(PROGRAM).html: $(PROGRAM).c $(wildcard *.h) $(PIXELRAM_FILES) $(ARGS_JS)
 	$(EMCC) $(CFLAGS) $(WEB_FLAGS) \
 		$(PROGRAM).c $(PIXELRAM_DIR)/pixelram.c \
 		-lraylib \
